@@ -16,6 +16,32 @@ const thoughtController = {
         res.sendStatus(400);
       });
   },
+
+  // create user
+  createThought({ body }, res) {
+    Thought.create(body)
+      .then((dbThoughtData) => res.json(dbThoughtData))
+      .catch((err) => res.json(err));
+  },
 };
+// addThought({ params, body }, res) {
+//   console.log(body);
+//   Thought.create(body)
+//     .then(({ _id }) => {
+//       return Thought.findOneAndUpdate(
+//         { _id: params.thoughtId },
+//         { $push: { thoughts: _id } },
+//         { new: true }
+//       );
+//     })
+//     .then((dbThoughtData) => {
+//       if (!dbThoughtData) {
+//         res.status(404).json({ message: "No thought found with this id!" });
+//         return;
+//       }
+//       res.json(dbThoughtData);
+//     })
+//     .catch((err) => res.json(err));
+// },
 
 module.exports = thoughtController;
