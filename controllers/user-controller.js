@@ -10,12 +10,11 @@ const userController = {
       // })
       // .select("-__v")
       // .sort({ _id: -1 })
-      .then((dbUser) =>
-        res.json(dbUser).catch((err) => {
-          console.log(err);
-          res.sendStatus(400);
-        })
-      );
+      .then((dbUserData) => res.json(dbUserData))
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(400);
+      });
   },
 };
 

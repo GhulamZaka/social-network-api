@@ -11,8 +11,9 @@ const ReactionSchema = new Schema(
     replyBody: {
       type: String,
       required: true,
-      default: [0 - 280],
+      maxlenght: 280,
     },
+
     username: {
       type: String,
       required: true,
@@ -35,7 +36,8 @@ const ThoughtSchema = new Schema(
     thoughtText: {
       type: String,
       required: true,
-      default: [1 - 280],
+      minlenght: 1,
+      maxlenght: 280,
     },
 
     createdAt: {
