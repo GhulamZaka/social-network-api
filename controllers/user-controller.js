@@ -67,6 +67,26 @@ const userController = {
       })
       .catch((err) => res.status(400).json(err));
   },
+
+  addFriend({ params, body }, res) {
+    console.log(body);
+    Friend.create(body)
+      .then(({ _id }) => {
+        return User.findOneAndUpdate(
+          { _id: params.userId },
+          { $push: { friends: _id } },
+          { new: true }
+        );
+      })
+      .then((dbFriendData) => {
+        if (!dbFriendData) {
+          res.status(404).json({ message: "No friend found with this id!" });
+          return;
+        }
+        res.json(dbFriendData);
+      })
+      .catch((err) => res.json(err));
+  },
 };
 
 module.exports = userController;
