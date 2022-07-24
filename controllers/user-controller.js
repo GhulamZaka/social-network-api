@@ -4,12 +4,12 @@ const userController = {
   // get all users
   getAllUser(req, res) {
     User.find({})
-      // .populate({
-      //   path: "comments",
-      //   select: "-__v",
-      // })
-      // .select("-__v")
-      // .sort({ _id: -1 })
+      .populate({
+        path: "thoughts",
+        select: "-__v",
+      })
+      .select("-__v")
+      .sort({ _id: -1 })
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
@@ -20,11 +20,11 @@ const userController = {
   // get user by id
   getUserById({ params }, res) {
     User.findOne({ _id: params.id })
-      // .populate({
-      //   path: "comments",
-      //   select: "-__v",
-      // })
-      // .select("-__v")
+      .populate({
+        path: "thoughts",
+        select: "-__v",
+      })
+      .select("-__v")
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
@@ -70,14 +70,36 @@ const userController = {
 
   addFriend({ params, body }, res) {
     console.log(body);
-    Friend.create(body)
-      .then(({ _id }) => {
-        return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $push: { friends: _id } },
-          { new: true }
-        );
+    // User.update(body)
+    //   .then(({ _id }) => {
+    // return
+    User.findOneAndUpdate(
+      { _id: params.userId },
+      { $push: { friends: params.friendId } },
+      { new: true }
+    )
+
+      .then((dbFriendData) => {
+        if (!dbFriendData) {
+          res.status(404).json({ message: "No friend found with this id!" });
+          return;
+        }
+        res.json(dbFriendData);
       })
+      .catch((err) => res.json(err));
+  },
+
+  deleteFriend({ params, body }, res) {
+    console.log(body);
+    // User.update(body)
+    //   .then(({ _id }) => {
+    // return
+    User.findOneAndUpdate(
+      { _id: params.userId },
+      { $pull: { friends: params.friendId } },
+      { new: true }
+    )
+
       .then((dbFriendData) => {
         if (!dbFriendData) {
           res.status(404).json({ message: "No friend found with this id!" });
